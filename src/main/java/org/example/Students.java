@@ -9,8 +9,8 @@ public class Students {
     private String email;
     private String date_of_birth;
 
-    public Students (int id, String first_name, String last_name, String string, String resultString) {
-        this.id = id;
+    public Students (int id, String first_name, String last_name, String email, String date_of_birth) {
+      this.id = id;
         this.first_name = first_name;
         this.last_name = last_name;
         this.email = email;
