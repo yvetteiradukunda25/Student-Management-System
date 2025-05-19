@@ -2,7 +2,7 @@ package org.example;
 
 import java.util.List;
 
-public interface Student <N, M> {
+public interface StudentsInterface <N, M> {
 
     List<N> findAll();
     N findById(M id);
