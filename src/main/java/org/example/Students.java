@@ -38,10 +38,16 @@ public int getId() {
 
     @Override
     public String toString() {
-        return "Students [first_name=" + first_name + ", last_name="
-                + last_name + ", email=" + email + ", date_of_birth=" + date_of_birth;
+        return "Students{" +
+                "id=" + id +
+                ", first_name='" + first_name + '\'' +
+                ", last_name='" + last_name + '\'' +
+                ", email='" + email + '\'' +
+                ", date_of_birth='" + date_of_birth + '\'' +
+                '}';
     }
-    }
+}
+
 
 
 

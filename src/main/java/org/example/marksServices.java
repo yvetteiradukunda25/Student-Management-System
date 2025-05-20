@@ -4,46 +4,47 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CoursesServices implements StudentsInterface<courses, Integer> {
+public class marksServices implements StudentsInterface<marks, Integer> {
     private static final String URL = "jdbc:postgresql://localhost:5432/Student Management System";
     private static final String USERNAME = "postgres";
     private static final String PASSWORD = "coding";
 
-    private static Connection connect() throws SQLException {
+    private Connection connect() throws SQLException {
         return DriverManager.getConnection(URL, USERNAME, PASSWORD);
     }
 
     @Override
-    public List<courses> findAll() {
-        List<courses> course = new ArrayList<>();
-        String query = "SELECT * FROM courses";
+    public List<marks> findAll() {
+        List<marks> mark = new ArrayList<>();
+        String query = "SELECT * FROM marks";
         try (Connection conn = connect(); Statement statement = conn.createStatement(); ResultSet result = statement.executeQuery(query)) {
             while (result.next()) {
-                course.add(new courses(
+                mark.add(new marks(
                         result.getInt(1),
-                        result.getString(2),
-                        result.getString(3)
+                        result.getInt(2),
+                        result.getInt(3)
+
                 ));
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
 
-        return List.of();
+        return mark;
 
     }
 
     @Override
-    public courses findById(Integer id) {
-        String query = "SELECT FROM courses WHERE id = ?";
+    public marks findById(Integer id) {
+        String query = "SELECT FROM marks WHERE student_id = ?";
         try (Connection conn = connect(); PreparedStatement pstmt = conn.prepareStatement(query)) {
             pstmt.setInt(1, id);
             ResultSet result = pstmt.executeQuery();
             while (result.next()) {
-                return new courses(
+                return new marks(
                         result.getInt(1),
-                        result.getString(2),
-                        result.getString(3)
+                        result.getInt(2),
+                        result.getInt(3)
                 );
             }
         } catch (SQLException e) {
@@ -54,13 +55,13 @@ public class CoursesServices implements StudentsInterface<courses, Integer> {
 
 
     @Override
-    public void deleteById(Integer id) {
-        String query = "DELETE FROM courses WHERE id = ?";
+    public void deleteById (Integer id){
+        String query = "DELETE FROM marks WHERE student_id = ?";
         try (Connection conn = connect(); PreparedStatement pstmt = conn.prepareStatement(query)) {
             pstmt.setInt(1, id);
             int rowsAffected = pstmt.executeUpdate();
             if (rowsAffected > 0) {
-                System.out.println("course deleted successfully");
+                System.out.println("Student deleted successfully");
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -69,38 +70,36 @@ public class CoursesServices implements StudentsInterface<courses, Integer> {
 
 
     @Override
-    public void create(courses course) {
-        String query = "INSERT INTO courses (course_name, course_description ) VALUES (?, ?)";
+    public void create (marks mark) {
+        String query = "INSERT INTO marks ( student_id, course_id, marks) VALUES (?, ?, ?)";
         try (Connection conn = connect(); PreparedStatement pstmt = conn.prepareStatement(query)) {
-            pstmt.setInt(1, course.getId());
-            pstmt.setString(2, course.getCourse_name());
-            pstmt.setString(3, course.getCourse_description());
-
-            pstmt.executeUpdate();
-
-                System.out.println("course added successfully");
-
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
-    }
-
-    @Override
-    public void update(courses courses, Integer id) {
-
-    }
-
-    @Override
-    public void update(courses courses) {
-        String query = "UPDATE courses SET course_name =?, course_description =?, id = ?";
-
-        try (Connection conn = connect(); PreparedStatement pstmt = conn.prepareStatement(query)) {
-            pstmt.setString(1, courses.getCourse_name());
-            pstmt.setString(2, courses.getCourse_description());
-
+            pstmt.setInt(1, marks.getStudent_id());
+            pstmt.setInt(2, marks.getCourse_id());
+            pstmt.setInt(3, marks.getMarks());
             int rowsAffected = pstmt.executeUpdate();
             if (rowsAffected > 0) {
-                System.out.println("Course is well  updated");
+                System.out.println("Student added successfully");
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+
+
+    @Override
+    public void update(Students students){
+        String query = "UPDATE students SET first_name =?, last_name =?,  email =?, date_of_birth =?,  id = ?";
+
+        try (Connection conn = connect(); PreparedStatement pstmt = conn.prepareStatement(query)) {
+            pstmt.setInt(1, students.getId());
+            pstmt.setString(2, students.getFirst_name());
+            pstmt.setString(3, students.getLast_name());
+            pstmt.setString(4, students.getEmail());
+            pstmt.setString(5, students.getDate_of_birth());
+            int rowsAffected = pstmt.executeUpdate();
+            if (rowsAffected > 0) {
+                System.out.println("student updated successfully");
             }
 
         } catch (SQLException e) {
@@ -108,8 +107,6 @@ public class CoursesServices implements StudentsInterface<courses, Integer> {
         }
     }
 
-    @Override
-    public void update(Students students) {
 
-    }
+
 }
