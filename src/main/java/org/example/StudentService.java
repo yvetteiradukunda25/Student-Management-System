@@ -20,18 +20,18 @@ public class StudentService implements StudentsInterface<Students, Integer> {
         try (Connection conn = connect(); Statement statement = conn.createStatement(); ResultSet result = statement.executeQuery(query)) {
             while (result.next()) {
                 students.add(new Students(
-                         result.getInt(0),
-                        result.getString(1),
+                        result.getInt(1),
                         result.getString(2),
                         result.getString(3),
-                        result.getString(4)
+                        result.getString(4),
+                        result.getString(5)
                 ));
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
 
-        return List.of();
+        return students;
 
     }
 
@@ -98,11 +98,9 @@ public class StudentService implements StudentsInterface<Students, Integer> {
                 pstmt.setString(2, students.getLast_name());
                 pstmt.setString(3, students.getEmail());
                 pstmt.setString(4, students.getDate_of_birth());
-                pstmt.setInt(5, id);
-
                 int rowsAffected = pstmt.executeUpdate();
                 if (rowsAffected > 0) {
-                    System.out.println("Task updated successfully");
+                    System.out.println("student updated successfully");
                 }
 
             } catch (SQLException e) {

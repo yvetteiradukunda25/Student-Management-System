@@ -10,16 +10,15 @@ public class Students {
     private String date_of_birth;
 
     public Students (int id, String first_name, String last_name, String email, String date_of_birth) {
-      this.id = id;
+        this.id = id;
         this.first_name = first_name;
         this.last_name = last_name;
         this.email = email;
         this.date_of_birth = date_of_birth;
     }
-
-    public int getId() {
+public int getId() {
         return id;
-    }
+}
 
     public String getFirst_name() {
         return first_name;
@@ -39,7 +38,7 @@ public class Students {
 
     @Override
     public String toString() {
-        return "Students [id=" + id + ", first_name=" + first_name + ", last_name="
+        return "Students [first_name=" + first_name + ", last_name="
                 + last_name + ", email=" + email + ", date_of_birth=" + date_of_birth;
     }
     }
