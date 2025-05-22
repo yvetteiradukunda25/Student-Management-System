@@ -10,6 +10,5 @@ public interface StudentsInterface <N, M> {
     void create(N n);
     void update(N n, M id);
 
-    void update(Students students);
-    void update(courses courses);
+
 }

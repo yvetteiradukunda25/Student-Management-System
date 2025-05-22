@@ -1,10 +1,9 @@
 package org.example;
-import org.example.Students;
-import org.example.courses;
+
 import java.util.Scanner;
 //SPRINGBOOT ANNOTATIONS
 //REST APIS
-//SPRINGDATA ANNOTATIONS
+//SPRING DATA ANNOTATIONS
 public class Main {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
@@ -56,7 +55,7 @@ public class Main {
                     int id = Integer.parseInt(sc.nextLine());
                     Students student = studentService.findById(id);
                     student = new Students(id, student.getFirst_name(), student.getLast_name(), student.getEmail(), student.getDate_of_birth() );
-                    studentService.update(student);
+                    studentService.findById(student.getId());
 
 
 
@@ -78,7 +77,7 @@ public class Main {
                     break;
 
                 case "f":
-            //codes
+
                     for(courses course: coursesServices.findAll()){
                         System.out.println(course.toString());
                     }
@@ -86,17 +85,16 @@ public class Main {
                 break;
 
                 case "g":
-           //codes
+
                     System.out.println("Enter the id you want to update");
                     int courseId = Integer.parseInt(sc.nextLine());
                     courses course = coursesServices.findById(courseId);
                     course = new courses(course.getId(), course.getCourse_name(), course.getCourse_description() );
-                    coursesServices.update(course);
+                    coursesServices.findById(course.getId());
 
                 break;
 
                 case "h":
-             //codes
                     System.out.println("Enter the id you want to delete");
                     int course_id = Integer.parseInt(sc.nextLine());
                     studentService.deleteById(course_id);
@@ -104,26 +102,43 @@ public class Main {
                 break;
 
                 case "i":
-              //codes
+
+                    System.out.println("Enter student Id");
+                    int studentid = sc.nextInt();
+                    System.out.println("Enter course Id");
+                    int courseid = sc.nextInt();
+                    System.out.println("Enter student marks");
+                    int marks = sc.nextInt();
+
+                    marksServices.create(new marks( 0, 0, 80));
 
                 break;
 
                 case "j":
-//codes
+                        for( marks mark : marksServices.findAll()){
+                             System.out.println( mark.toString());
+                             }
                 break;
 
                 case "k":
+                    System.out.println("Enter the id you want to update");
+                    int s_id = Integer.parseInt(sc.nextLine());
+                    marks mark1 = marksServices.findById(s_id);
+                    mark1 = new marks(mark1.getStudent_id(), mark1.getCourse_id(), mark1.getMarks());
+                    marksServices.findById(mark1.getStudent_id());
 
-                    //codes
                     break;
 
                 case "l":
+                    System.out.println("Enter the student id you want to delete");
+                    int st_id = Integer.parseInt(sc.nextLine());
+                    marksServices.deleteById(st_id);
+                    System.out.println("The student with id " + st_id + " was deleted.");
 
-                    //codes
 
                     break;
                 case "m":
-                    //codes
+
                     System.out.println("This is the end of the program");
                 break;
                 default:

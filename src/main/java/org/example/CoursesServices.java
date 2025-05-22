@@ -29,7 +29,7 @@ public class CoursesServices implements StudentsInterface<courses, Integer> {
             System.out.println(e.getMessage());
         }
 
-        return List.of();
+        return course;
 
     }
 
@@ -78,7 +78,7 @@ public class CoursesServices implements StudentsInterface<courses, Integer> {
 
             pstmt.executeUpdate();
 
-                System.out.println("course added successfully");
+            System.out.println("course added successfully");
 
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -87,11 +87,6 @@ public class CoursesServices implements StudentsInterface<courses, Integer> {
 
     @Override
     public void update(courses courses, Integer id) {
-
-    }
-
-    @Override
-    public void update(courses courses) {
         String query = "UPDATE courses SET course_name =?, course_description =?, id = ?";
 
         try (Connection conn = connect(); PreparedStatement pstmt = conn.prepareStatement(query)) {
@@ -107,9 +102,5 @@ public class CoursesServices implements StudentsInterface<courses, Integer> {
             System.out.println(e.getMessage());
         }
     }
-
-    @Override
-    public void update(Students students) {
-
     }
-}
+

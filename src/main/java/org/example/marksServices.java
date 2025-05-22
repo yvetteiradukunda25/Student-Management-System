@@ -9,28 +9,27 @@ public class marksServices implements StudentsInterface<marks, Integer> {
     private static final String USERNAME = "postgres";
     private static final String PASSWORD = "coding";
 
-    private Connection connect() throws SQLException {
+    private static Connection connect() throws SQLException {
         return DriverManager.getConnection(URL, USERNAME, PASSWORD);
     }
 
     @Override
     public List<marks> findAll() {
-        List<marks> mark = new ArrayList<>();
+        List<marks> marks = new ArrayList<>();
         String query = "SELECT * FROM marks";
         try (Connection conn = connect(); Statement statement = conn.createStatement(); ResultSet result = statement.executeQuery(query)) {
             while (result.next()) {
-                mark.add(new marks(
+                marks.add(new marks(
                         result.getInt(1),
                         result.getInt(2),
                         result.getInt(3)
-
                 ));
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
 
-        return mark;
+        return marks;
 
     }
 
@@ -55,13 +54,13 @@ public class marksServices implements StudentsInterface<marks, Integer> {
 
 
     @Override
-    public void deleteById (Integer id){
-        String query = "DELETE FROM marks WHERE student_id = ?";
+    public void deleteById(Integer id) {
+        String query = "DELETE FROM marks WHERE id = ?";
         try (Connection conn = connect(); PreparedStatement pstmt = conn.prepareStatement(query)) {
             pstmt.setInt(1, id);
             int rowsAffected = pstmt.executeUpdate();
             if (rowsAffected > 0) {
-                System.out.println("Student deleted successfully");
+                System.out.println("marks deleted successfully");
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -70,43 +69,38 @@ public class marksServices implements StudentsInterface<marks, Integer> {
 
 
     @Override
-    public void create (marks mark) {
-        String query = "INSERT INTO marks ( student_id, course_id, marks) VALUES (?, ?, ?)";
+    public void create(marks marks) {
+        String query = "INSERT INTO marks (student_id, course_id, marks) VALUES (?, ?, ?)";
         try (Connection conn = connect(); PreparedStatement pstmt = conn.prepareStatement(query)) {
             pstmt.setInt(1, marks.getStudent_id());
             pstmt.setInt(2, marks.getCourse_id());
             pstmt.setInt(3, marks.getMarks());
-            int rowsAffected = pstmt.executeUpdate();
-            if (rowsAffected > 0) {
-                System.out.println("Student added successfully");
-            }
+
+            pstmt.executeUpdate();
+
+            System.out.println("course added successfully");
+
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
     }
-
 
 
     @Override
-    public void update(Students students){
-        String query = "UPDATE students SET first_name =?, last_name =?,  email =?, date_of_birth =?,  id = ?";
+    public void update(marks marks , Integer id) {
+        String query = "UPDATE marks SET course_id =?, marks =?, student_id = ?";
 
         try (Connection conn = connect(); PreparedStatement pstmt = conn.prepareStatement(query)) {
-            pstmt.setInt(1, students.getId());
-            pstmt.setString(2, students.getFirst_name());
-            pstmt.setString(3, students.getLast_name());
-            pstmt.setString(4, students.getEmail());
-            pstmt.setString(5, students.getDate_of_birth());
+            pstmt.setInt(1, marks.getCourse_id());
+            pstmt.setInt(2, marks.getMarks());
+
             int rowsAffected = pstmt.executeUpdate();
             if (rowsAffected > 0) {
-                System.out.println("student updated successfully");
+                System.out.println("Marks are well  updated");
             }
 
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
     }
-
-
-
 }

@@ -89,27 +89,25 @@ public class StudentService implements StudentsInterface<Students, Integer> {
             }
         }
 
-
-
     @Override
-    public void update(Students students){
-            String query = "UPDATE students SET first_name =?, last_name =?,  email =?, date_of_birth =?,  id = ?";
+    public void update(Students students, Integer id) {
+        String query = "UPDATE students SET first_name =?, last_name =?,  email =?, date_of_birth =?,  id = ?";
 
-            try (Connection conn = connect(); PreparedStatement pstmt = conn.prepareStatement(query)) {
-                pstmt.setInt(1, students.getId());
-                pstmt.setString(2, students.getFirst_name());
-                pstmt.setString(3, students.getLast_name());
-                pstmt.setString(4, students.getEmail());
-                pstmt.setString(5, students.getDate_of_birth());
-                int rowsAffected = pstmt.executeUpdate();
-                if (rowsAffected > 0) {
-                    System.out.println("student updated successfully");
-                }
-
-            } catch (SQLException e) {
-                System.out.println(e.getMessage());
+        try (Connection conn = connect(); PreparedStatement pstmt = conn.prepareStatement(query)) {
+            pstmt.setInt(1, students.getId());
+            pstmt.setString(2, students.getFirst_name());
+            pstmt.setString(3, students.getLast_name());
+            pstmt.setString(4, students.getEmail());
+            pstmt.setString(5, students.getDate_of_birth());
+            int rowsAffected = pstmt.executeUpdate();
+            if (rowsAffected > 0) {
+                System.out.println("student updated successfully");
             }
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
         }
+    }
 
 
 
