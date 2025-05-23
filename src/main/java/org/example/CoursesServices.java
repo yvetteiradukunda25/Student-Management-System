@@ -35,7 +35,7 @@ public class CoursesServices implements StudentsInterface<courses, Integer> {
 
     @Override
     public courses findById(Integer id) {
-        String query = "SELECT FROM courses WHERE id = ?";
+        String query = "SELECT * FROM courses WHERE id = ?";
         try (Connection conn = connect(); PreparedStatement pstmt = conn.prepareStatement(query)) {
             pstmt.setInt(1, id);
             ResultSet result = pstmt.executeQuery();
@@ -55,15 +55,30 @@ public class CoursesServices implements StudentsInterface<courses, Integer> {
 
     @Override
     public void deleteById(Integer id) {
-        String query = "DELETE FROM courses WHERE id = ?";
-        try (Connection conn = connect(); PreparedStatement pstmt = conn.prepareStatement(query)) {
-            pstmt.setInt(1, id);
-            int rowsAffected = pstmt.executeUpdate();
-            if (rowsAffected > 0) {
-                System.out.println("course deleted successfully");
+        String deleteMarks = "DELETE FROM marks WHERE course_id = ?";
+        String deleteCourse = "DELETE FROM courses WHERE id = ?";
+
+        try (Connection conn = connect()) {
+            conn.setAutoCommit(false); // Begin transaction
+
+            try (PreparedStatement ps1 = conn.prepareStatement(deleteMarks)) {
+                ps1.setInt(1, id);
+                ps1.executeUpdate();
             }
+
+            try (PreparedStatement ps2 = conn.prepareStatement(deleteCourse)) {
+                ps2.setInt(1, id);
+                int rowsAffected = ps2.executeUpdate();
+                if (rowsAffected > 0) {
+                    System.out.println(" Course deleted successfully.");
+                } else {
+                    System.out.println(" Course not found.");
+                }
+            }
+
+            conn.commit(); // Commit transaction
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.out.println(" Error deleting course: " + e.getMessage());
         }
     }
 
@@ -72,9 +87,8 @@ public class CoursesServices implements StudentsInterface<courses, Integer> {
     public void create(courses course) {
         String query = "INSERT INTO courses (course_name, course_description ) VALUES (?, ?)";
         try (Connection conn = connect(); PreparedStatement pstmt = conn.prepareStatement(query)) {
-            pstmt.setInt(1, course.getId());
-            pstmt.setString(2, course.getCourse_name());
-            pstmt.setString(3, course.getCourse_description());
+            pstmt.setString(1, course.getCourse_name());
+            pstmt.setString(2, course.getCourse_description());
 
             pstmt.executeUpdate();
 
@@ -86,12 +100,13 @@ public class CoursesServices implements StudentsInterface<courses, Integer> {
     }
 
     @Override
-    public void update(courses courses, Integer id) {
+    public void update(courses course) {
         String query = "UPDATE courses SET course_name =?, course_description =?, id = ?";
 
         try (Connection conn = connect(); PreparedStatement pstmt = conn.prepareStatement(query)) {
-            pstmt.setString(1, courses.getCourse_name());
-            pstmt.setString(2, courses.getCourse_description());
+            pstmt.setString(1, course.getCourse_name());
+            pstmt.setString(2, course.getCourse_description());
+            pstmt.setInt(3,course.getId());
 
             int rowsAffected = pstmt.executeUpdate();
             if (rowsAffected > 0) {

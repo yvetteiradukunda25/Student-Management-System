@@ -8,7 +8,7 @@ public interface StudentsInterface <N, M> {
     N findById(M id);
     void deleteById(M id);
     void create(N n);
-    void update(N n, M id);
+    void update(N n);
 
 
 }

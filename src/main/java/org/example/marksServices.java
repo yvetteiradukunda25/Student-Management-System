@@ -35,7 +35,7 @@ public class marksServices implements StudentsInterface<marks, Integer> {
 
     @Override
     public marks findById(Integer id) {
-        String query = "SELECT FROM marks WHERE student_id = ?";
+        String query = "SELECT * FROM marks WHERE student_id = ?";
         try (Connection conn = connect(); PreparedStatement pstmt = conn.prepareStatement(query)) {
             pstmt.setInt(1, id);
             ResultSet result = pstmt.executeQuery();
@@ -55,7 +55,7 @@ public class marksServices implements StudentsInterface<marks, Integer> {
 
     @Override
     public void deleteById(Integer id) {
-        String query = "DELETE FROM marks WHERE id = ?";
+        String query = "DELETE FROM marks WHERE student_id = ? ";
         try (Connection conn = connect(); PreparedStatement pstmt = conn.prepareStatement(query)) {
             pstmt.setInt(1, id);
             int rowsAffected = pstmt.executeUpdate();
@@ -87,12 +87,13 @@ public class marksServices implements StudentsInterface<marks, Integer> {
 
 
     @Override
-    public void update(marks marks , Integer id) {
+    public void update(marks mark) {
         String query = "UPDATE marks SET course_id =?, marks =?, student_id = ?";
 
         try (Connection conn = connect(); PreparedStatement pstmt = conn.prepareStatement(query)) {
-            pstmt.setInt(1, marks.getCourse_id());
-            pstmt.setInt(2, marks.getMarks());
+            pstmt.setInt(1, mark.getCourse_id());
+            pstmt.setInt(2,mark.getStudent_id());
+            pstmt.setInt(3, mark.getMarks());
 
             int rowsAffected = pstmt.executeUpdate();
             if (rowsAffected > 0) {

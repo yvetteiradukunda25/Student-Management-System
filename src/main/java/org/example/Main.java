@@ -1,5 +1,6 @@
 package org.example;
 
+import java.time.LocalDate;
 import java.util.Scanner;
 //SPRINGBOOT ANNOTATIONS
 //REST APIS
@@ -45,21 +46,46 @@ public class Main {
 
                 case "b":
                     for( Students Std : studentService.findAll()){
-                    System.out.println( Std.toString());
+                    System.out.println(Std);
                     }
 
                 break;
                 case "c":
-                    //codes
-                    System.out.println("Enter the id you want to update");
+                    System.out.print("Enter the ID you want to update: ");
                     int id = Integer.parseInt(sc.nextLine());
+
                     Students student = studentService.findById(id);
-                    student = new Students(id, student.getFirst_name(), student.getLast_name(), student.getEmail(), student.getDate_of_birth() );
-                    studentService.findById(student.getId());
 
+                    if (student == null) {
+                        System.out.println("Student not found.");
+                        break; // Exit the case to avoid NullPointerException
+                    }
 
+                    // Prompt for new values
+                    System.out.print("New first name (" + student.getFirst_name() + "): ");
+                    String newFirst = sc.nextLine();
 
-                break;
+                    System.out.print("New last name (" + student.getLast_name() + "): ");
+                    String newLast = sc.nextLine();
+
+                    System.out.print("New email (" + student.getEmail() + "): ");
+                    String newEmail = sc.nextLine();
+
+                    System.out.print("New date of birth (" + student.getDate_of_birth() + ") [yyyy-mm-dd]: ");
+                    String newDob = sc.nextLine();
+
+                    // Update with non-empty values
+                    student.setFirst_name(!newFirst.isEmpty() ? newFirst : student.getFirst_name());
+                    student.setLast_name(!newLast.isEmpty() ? newLast : student.getLast_name());
+                    student.setEmail(!newEmail.isEmpty() ? newEmail : student.getEmail());
+                    if (!newDob.isEmpty()) {
+                        student.setDate_of_birth(newDob);
+                    }
+
+                    studentService.update(student);
+                    System.out.println("Student updated.");
+                    break;
+
 
                 case "d":
                     System.out.println("Enter the id you want to delete");
@@ -97,20 +123,20 @@ public class Main {
                 case "h":
                     System.out.println("Enter the id you want to delete");
                     int course_id = Integer.parseInt(sc.nextLine());
-                    studentService.deleteById(course_id);
-                    System.out.println("The student with id " + course_id + " was deleted.");
+                    coursesServices.deleteById(course_id);
+                    System.out.println("The course with id " + course_id + " was deleted.");
                 break;
 
                 case "i":
 
-                    System.out.println("Enter student Id");
-                    int studentid = sc.nextInt();
-                    System.out.println("Enter course Id");
-                    int courseid = sc.nextInt();
-                    System.out.println("Enter student marks");
-                    int marks = sc.nextInt();
-
-                    marksServices.create(new marks( 0, 0, 80));
+                    System.out.print("Student ID: ");
+                    int sid = Integer.parseInt(sc.nextLine());
+                    System.out.print("Course ID: ");
+                    int cid = Integer.parseInt(sc.nextLine());
+                    System.out.print("Marks: ");
+                    int m = Integer.parseInt(sc.nextLine());
+                    marksServices.create(new marks(sid, cid, m));
+                    System.out.println("Mark added/updated.");
 
                 break;
 
@@ -125,7 +151,7 @@ public class Main {
                     int s_id = Integer.parseInt(sc.nextLine());
                     marks mark1 = marksServices.findById(s_id);
                     mark1 = new marks(mark1.getStudent_id(), mark1.getCourse_id(), mark1.getMarks());
-                    marksServices.findById(mark1.getStudent_id());
+                    marksServices.update(mark1);
 
                     break;
 
